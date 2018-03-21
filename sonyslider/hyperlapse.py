@@ -1,11 +1,12 @@
-from flask import jsonify, Blueprint
+from flask import jsonify, Blueprint, Response
 from flask_api import status
-import time
-from sonyslider.slidercontroller import SliderController
-from sonyslider.camera import Camera
+from slidercontroller import SliderController
+from camera import Camera
 import logging
+import time
 
 LOGGER = logging.getLogger(__name__)
+
 
 class HyperlapseEngine(object):
 
@@ -113,10 +114,10 @@ def set_command_view(cmd=None):
     if cmd == 'start':
         try:
             hyperlapse_engine.start()
-            return status.HTTP_202_ACCEPTED
+            return
         except Exception as e:
             content = {'message': e.__repr__()}
-            return content
+            return content, status.HTTP_500_INTERNAL_SERVER_ERROR
     elif cmd == 'stop':
         hyperlapse_engine.stop()
         return status.HTTP_202_ACCEPTED

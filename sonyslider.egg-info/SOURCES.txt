@@ -1,0 +1,12 @@
+MANIFEST.in
+README.md
+sonyslider/__init__.py
+sonyslider/camera.py
+sonyslider/hyperlapse.py
+sonyslider/slidercontroller.py
+sonyslider/sonyslider.py
+sonyslider.egg-info/PKG-INFO
+sonyslider.egg-info/SOURCES.txt
+sonyslider.egg-info/dependency_links.txt
+sonyslider.egg-info/requires.txt
+sonyslider.egg-info/top_level.txt

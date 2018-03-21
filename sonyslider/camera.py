@@ -1,17 +1,18 @@
 import os
 import logging
-
 LOGGER = logging.getLogger(__name__)
+
 
 class Camera(object):
     def __init__(self):
-        self.camera_name = 'SonyA6000'
+        self.camera_name = 'DSLR1'
 
     def snap(self):
+        LOGGER.info("Sending command irsend")
         cmd = 'irsend SEND_ONCE {} S'.format(self.camera_name)
-        try:
-            res = os.system(cmd)
-        except Exception as e:
-            LOGGER.exception(e.__repr__())
+
+        res = os.system(cmd)
+        if res != 0:
+            raise Exception("Error cmd response:{}".format(res))
 
         return res
