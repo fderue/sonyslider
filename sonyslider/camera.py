@@ -13,6 +13,7 @@ class Camera(object):
 
         res = os.system(cmd)
         if res != 0:
-            raise Exception("Error cmd response:{}".format(res))
+            #raise Exception("Error cmd response:{}".format(res))
+            LOGGER.error("Error cmd response:{}".format(res))
 
         return res
