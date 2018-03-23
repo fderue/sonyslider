@@ -41,7 +41,7 @@ class HyperlapseEngine(object):
                     "#pictures total = {2}".format(self.time_step, self.spatial_step, self.nb_picture_total))
         delay = self.time_step/2.0
         for image_idx in range(self.nb_picture_total):
-            if is_processing:
+            if is_processing():
                 LOGGER.info("Capturing image #{0}/{1}".format(image_idx+1, self.nb_picture_total))
                 self.curr_picture_idx = image_idx
                 self.camera.snap()
@@ -118,22 +118,19 @@ def get_curr_picture_view():
     )
 
 
-capturing = None
 @hyperlapse_blueprint.route('/hyperlapse/command/<cmd>', methods=['PUT'])
 def set_command_view(cmd=None):
     global capturing
     if cmd == 'start':
         try:
-            capturing = threading.Thread(target=hyperlapse_engine.start, args=(lambda: hyperlapse_engine.is_processing,))
-            capturing.start()
+            thread_processing = threading.Thread(target=hyperlapse_engine.start, args=(lambda: hyperlapse_engine.is_processing,))
+            thread_processing.start()
             return {'message': "Starting hyperlapse"}, status.HTTP_200_OK
         except Exception as e:
             content = {'message': e.__repr__()}
             return content, status.HTTP_500_INTERNAL_SERVER_ERROR
     elif cmd == 'stop':
         hyperlapse_engine.stop()
-        if capturing:
-            capturing.join()
         return {'message': "Stopping hyperlapse"}, status.HTTP_200_OK
     else:
         content = {'message': 'command not found, choose either start or stop'}
